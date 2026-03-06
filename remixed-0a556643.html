@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3DA Prints — Custom 3D Printed Accessories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --accent: #4f8ef7;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --text: #f0f0f8;
+    --muted: #8888aa;
+    --dim: #444466;
+    --shadow: rgba(0,0,0,0.5);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; overflow-x:hidden; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--surface); }
+  ::-webkit-scrollbar-thumb { background:var(--dim); border-radius:3px; }
+
+  /* ── HEADER ── */
+  header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(10,10,15,0.85);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+    padding:0 6%;
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-mark {
+    width:36px; height:36px; border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:900; color:#fff;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .logo-name { font-size:1.15rem; font-weight:700; color:var(--text); letter-spacing:-0.3px; }
+  .logo-name span { color:var(--accent); }
+  nav { display:flex; gap:24px; align-items:center; }
+  nav a { color:var(--muted); text-decoration:none; font-size:0.88rem; font-weight:500; transition:color 0.2s; }
+  nav a:hover { color:var(--text); }
+  .nav-cart {
+    background:var(--accent); color:#fff; padding:8px 18px;
+    border-radius:8px; font-size:0.82rem; font-weight:600;
+    font-family:'JetBrains Mono',monospace; letter-spacing:0.03em;
+    transition:opacity 0.2s; cursor:pointer; border:none;
+  }
+  .nav-cart:hover { opacity:0.85; }
+  .cart-badge {
+    background:#ef4444; color:#fff; border-radius:50%;
+    width:18px; height:18px; font-size:0.6rem;
+    display:inline-flex; align-items:center; justify-content:center;
+    margin-left:4px; vertical-align:middle;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:88vh; display:flex; align-items:center;
+    padding:80px 6% 60px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse 70% 60% at 70% 50%, rgba(79,142,247,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(124,58,237,0.07) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; max-width:1200px; width:100%; margin:0 auto; }
+  .hero-eyebrow {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(79,142,247,0.1); border:1px solid rgba(79,142,247,0.25);
+    color:var(--accent); border-radius:20px; padding:5px 14px;
+    font-size:0.75rem; font-weight:600; font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:20px;
+  }
+  .hero h1 { font-size:clamp(2.4rem,4.5vw,3.6rem); font-weight:900; line-height:1.08; letter-spacing:-1px; margin-bottom:20px; }
+  .hero h1 .grad { background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero-sub { color:var(--muted); font-size:1.05rem; margin-bottom:10px; max-width:460px; }
+  .hero-perks { display:flex; flex-direction:column; gap:7px; margin-bottom:32px; margin-top:16px; }
+  .perk { display:flex; align-items:center; gap:10px; font-size:0.9rem; color:var(--muted); }
+  .perk .dot { width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; }
+  .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-primary {
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff; padding:13px 28px; border-radius:9px; border:none;
+    font-size:0.88rem; font-weight:600; font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.04em; cursor:pointer; text-decoration:none;
+    display:inline-block; transition:opacity 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { opacity:0.88; transform:translateY(-1px); }
+  .btn-outline {
+    background:transparent; color:var(--text); padding:13px 28px; border-radius:9px;
+    border:1px solid var(--border); font-size:0.88rem; font-weight:600;
+    font-family:'JetBrains Mono',monospace; cursor:pointer; text-decoration:none;
+    display:inline-block; transition:border-color 0.2s, transform 0.15s;
+  }
+  .btn-outline:hover { border-color:var(--accent); transform:translateY(-1px); }
+
+  /* Hero visual */
+  .hero-visual { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .hero-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px; aspect-ratio:1; font-size:2.4rem;
+    transition:border-color 0.3s;
+  }
+  .hero-card:hover { border-color:var(--accent); }
+  .hero-card:first-child { grid-column:span 2; aspect-ratio:2/1; font-size:3rem; }
+  .hero-card-label { font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    background:var(--surface);
+    padding:18px 6%;
+    display:flex; justify-content:center; gap:48px; flex-wrap:wrap;
+  }
+  .trust-item { display:flex; align-items:center; gap:10px; font-size:0.85rem; color:var(--muted); }
+  .trust-item strong { color:var(--text); font-weight:600; }
+
+  /* ── SECTIONS ── */
+  section { padding:80px 6%; }
+  .section-eyebrow {
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+    text-transform:uppercase; letter-spacing:0.12em; color:var(--accent);
+    margin-bottom:8px;
+  }
+  .section-title { font-size:clamp(1.6rem,2.8vw,2.2rem); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+  .section-sub { color:var(--muted); font-size:0.98rem; max-width:480px; margin-bottom:44px; }
+
+  /* ── SHOP ── */
+  #shop { background:var(--bg); }
+  .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:20px; max-width:1200px; }
+  .product-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    overflow:hidden; transition:transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor:default;
+  }
+  .product-card:hover { transform:translateY(-3px); border-color:var(--accent); box-shadow:0 12px 40px rgba(79,142,247,0.1); }
+  .product-img {
+    background:var(--surface2); height:190px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:3.8rem; position:relative;
+  }
+  .badge {
+    position:absolute; top:10px; right:10px;
+    font-family:'JetBrains Mono',monospace; font-size:0.62rem;
+    text-transform:uppercase; letter-spacing:0.08em;
+    padding:4px 10px; border-radius:20px; font-weight:600;
+  }
+  .badge.new { background:rgba(79,142,247,0.15); color:var(--accent); border:1px solid rgba(79,142,247,0.3); }
+  .badge.popular { background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.3); }
+  .badge.sold-out { background:rgba(255,255,255,0.05); color:var(--muted); border:1px solid var(--border); }
+  .badge.custom { background:rgba(34,197,94,0.12); color:var(--green); border:1px solid rgba(34,197,94,0.3); }
+  .product-body { padding:18px 20px 20px; }
+  .product-name { font-size:1rem; font-weight:700; margin-bottom:6px; }
+  .product-desc { color:var(--muted); font-size:0.88rem; line-height:1.5; margin-bottom:16px; min-height:40px; }
+  .product-footer { display:flex; align-items:center; justify-content:space-between; }
+  .product-price { font-family:'JetBrains Mono',monospace; font-size:1.15rem; font-weight:600; color:var(--accent); }
+  .add-btn {
+    background:var(--surface2); color:var(--text); border:1px solid var(--border);
+    padding:8px 16px; border-radius:7px; font-size:0.78rem; font-weight:600;
+    font-family:'JetBrains Mono',monospace; cursor:pointer;
+    transition:background 0.2s, border-color 0.2s;
+  }
+  .add-btn:hover { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .add-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+  /* ── CUSTOM REQUEST BANNER ── */
+  .request-banner {
+    background:linear-gradient(135deg, rgba(79,142,247,0.08), rgba(124,58,237,0.08));
+    border:1px solid rgba(79,142,247,0.2);
+    border-radius:16px; padding:40px 48px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:32px; flex-wrap:wrap; max-width:1200px;
+    margin-top:48px;
+  }
+  .request-banner h3 { font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+  .request-banner p { color:var(--muted); font-size:0.95rem; max-width:500px; }
+
+  /* ── ABOUT ── */
+  #about { background:var(--surface); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; max-width:1100px; }
+  #about p { color:var(--muted); margin-bottom:14px; font-size:0.98rem; }
+  .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .stat-box {
+    background:var(--bg); border:1px solid var(--border); border-radius:12px;
+    padding:22px 18px; text-align:center;
+    transition:border-color 0.2s;
+  }
+  .stat-box:hover { border-color:var(--accent); }
+  .stat-num { font-size:2rem; font-weight:900; font-family:'JetBrains Mono',monospace; color:var(--accent); display:block; margin-bottom:4px; }
+  .stat-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  /* ── CONTACT ── */
+  #contact { background:var(--bg); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; max-width:1000px; }
+  .contact-form input, .contact-form textarea {
+    width:100%; padding:12px 16px;
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); font-family:'Inter',sans-serif; font-size:0.95rem;
+    outline:none; transition:border-color 0.2s; margin-bottom:12px;
+  }
+  .contact-form input:focus, .contact-form textarea:focus { border-color:var(--accent); }
+  .contact-form input::placeholder, .contact-form textarea::placeholder { color:var(--dim); }
+  .contact-form textarea { height:120px; resize:vertical; }
+  .contact-info-item { display:flex; gap:14px; align-items:flex-start; margin-bottom:22px; }
+  .ci-icon {
+    width:40px; height:40px; background:var(--surface2); border:1px solid var(--border);
+    border-radius:9px; display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; flex-shrink:0;
+  }
+  .ci-text strong { display:block; font-weight:600; font-size:0.92rem; margin-bottom:2px; }
+  .ci-text span { font-size:0.85rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  /* ── CART SIDEBAR ── */
+  .cart-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; }
+  .cart-overlay.open { display:block; }
+  .cart-panel {
+    position:fixed; top:0; right:-440px; width:420px; max-width:96vw;
+    height:100vh; background:var(--surface); z-index:201;
+    transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+    display:flex; flex-direction:column;
+    border-left:1px solid var(--border);
+  }
+  .cart-panel.open { right:0; }
+  .cart-header {
+    padding:22px 24px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .cart-header h2 { font-size:1.15rem; font-weight:700; }
+  .close-btn { background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; line-height:1; padding:4px; transition:color 0.2s; }
+  .close-btn:hover { color:var(--text); }
+  .cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
+  .cart-empty { text-align:center; padding:60px 20px; color:var(--muted); }
+  .cart-empty .ei { font-size:2.8rem; margin-bottom:12px; }
+  .cart-item { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); align-items:center; }
+  .cart-item-icon { width:50px; height:50px; background:var(--surface2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .cart-item-info { flex:1; }
+  .cart-item-name { font-size:0.92rem; font-weight:600; margin-bottom:3px; }
+  .cart-item-price { font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--accent); }
+  .qty-controls { display:flex; align-items:center; gap:8px; }
+  .qty-btn { width:24px; height:24px; background:var(--surface2); border:1px solid var(--border); border-radius:50%; cursor:pointer; color:var(--text); font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+  .qty-btn:hover { background:var(--accent); border-color:var(--accent); }
+  .qty-count { font-family:'JetBrains Mono',monospace; font-size:0.88rem; min-width:18px; text-align:center; }
+  .cart-footer { padding:18px 24px 24px; border-top:1px solid var(--border); }
+  .cart-total { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .total-label { font-family:'JetBrains Mono',monospace; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); }
+  .total-amount { font-size:1.5rem; font-weight:800; font-family:'JetBrains Mono',monospace; }
+  .checkout-btn { width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:14px; border-radius:9px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:600; cursor:pointer; transition:opacity 0.2s; }
+  .checkout-btn:hover { opacity:0.88; }
+
+  /* ── PAYMENT MODAL ── */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:300; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:100%; max-width:540px; max-height:92vh; overflow-y:auto; }
+  .modal-header { padding:22px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .modal-header h2 { font-size:1.2rem; font-weight:700; }
+  .modal-body { padding:28px; }
+  .order-summary { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:24px; }
+  .order-summary h3 { font-family:'JetBrains Mono',monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:12px; }
+  .summary-line { display:flex; justify-content:space-between; font-size:0.9rem; padding:3px 0; color:var(--muted); }
+  .summary-total { border-top:1px solid var(--border); margin-top:10px; padding-top:10px; color:var(--text); font-weight:700; font-size:1rem; }
+
+  /* Pay tabs */
+  .pay-tabs { display:flex; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:4px; gap:4px; margin-bottom:22px; }
+  .pay-tab { flex:1; padding:10px 6px; background:none; border:none; font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; cursor:pointer; color:var(--muted); border-radius:7px; transition:all 0.2s; font-weight:600; }
+  .pay-tab.active { background:var(--surface); color:var(--text); box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+  .pay-panel { display:none; }
+  .pay-panel.active { display:block; }
+
+  /* Venmo/Cash/Crypto panels */
+  .pay-center { text-align:center; padding:8px 0 4px; }
+  .pay-handle { font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700; color:var(--accent); margin:8px 0; }
+  .pay-note { color:var(--muted); font-size:0.88rem; line-height:1.5; max-width:360px; margin:0 auto 16px; }
+  .pay-instructions { background:var(--surface2); border-radius:8px; padding:14px 18px; margin-top:14px; text-align:left; }
+  .pay-instructions p { font-size:0.85rem; color:var(--muted); margin-bottom:6px; }
+  .pay-instructions p:last-child { margin-bottom:0; }
+  .pay-instructions strong { color:var(--text); }
+  .pay-confirm-btn { width:100%; margin-top:16px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:13px; border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:600; cursor:pointer; transition:opacity 0.2s; }
+  .pay-confirm-btn:hover { opacity:0.85; }
+  .crypto-address { font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--muted); word-break:break-all; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px; margin:10px 0; line-height:1.6; }
+  .copy-btn { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:6px 14px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.68rem; cursor:pointer; transition:all 0.2s; margin-top:4px; }
+  .copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* Card */
+  .form-row { margin-bottom:14px; }
+  .form-row label { display:block; font-family:'JetBrains Mono',monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:6px; }
+  .form-row input { width:100%; padding:11px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:7px; font-family:'JetBrains Mono',monospace; font-size:0.88rem; color:var(--text); outline:none; transition:border-color 0.2s; }
+  .form-row input:focus { border-color:var(--accent); }
+  .form-row input::placeholder { color:var(--dim); }
+  .form-row-split { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .stripe-note-box { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-top:16px; }
+  .stripe-note-box p:first-child { font-family:'JetBrains Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:6px; }
+  .stripe-note-box p { font-size:0.83rem; color:var(--muted); }
+  .stripe-note-box code { background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; font-size:0.76rem; }
+  .pay-now-btn { width:100%; margin-top:18px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:14px; border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:600; cursor:pointer; transition:opacity 0.2s; }
+  .pay-now-btn:hover { opacity:0.88; }
+
+  /* ── ADMIN ── */
+  .admin-toggle { position:fixed; bottom:24px; left:24px; background:var(--surface); color:var(--muted); border:1px solid var(--border); padding:10px 18px; border-radius:30px; font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; cursor:pointer; z-index:150; transition:all 0.2s; }
+  .admin-toggle:hover { border-color:var(--accent); color:var(--accent); }
+  .admin-panel { display:none; position:fixed; bottom:70px; left:24px; width:360px; background:var(--surface); border:1px solid var(--border); border-radius:14px; z-index:151; box-shadow:0 20px 60px rgba(0,0,0,0.5); max-height:82vh; overflow-y:auto; }
+  .admin-panel.open { display:block; }
+  .admin-header { background:var(--surface2); padding:16px 20px; border-radius:13px 13px 0 0; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .admin-header h3 { font-size:0.95rem; font-weight:700; }
+  .admin-body { padding:18px 20px; }
+  .admin-body label { display:block; font-family:'JetBrains Mono',monospace; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:5px; }
+  .admin-body input, .admin-body textarea, .admin-body select { width:100%; padding:9px 12px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'Inter',sans-serif; font-size:0.88rem; margin-bottom:11px; outline:none; }
+  .admin-body input:focus, .admin-body textarea:focus { border-color:var(--accent); }
+  .admin-add-btn { width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:11px; border-radius:7px; font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; font-weight:600; cursor:pointer; transition:opacity 0.2s; margin-bottom:14px; }
+  .admin-add-btn:hover { opacity:0.85; }
+  .admin-items-list { border-top:1px solid var(--border); padding-top:14px; }
+  .admin-item { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.85rem; }
+  .admin-item .del-btn { background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.95rem; padding:2px 8px; }
+
+  /* ── SUCCESS ── */
+  .success-screen { text-align:center; padding:40px 20px; }
+  .success-screen .si { font-size:3.2rem; margin-bottom:14px; }
+  .success-screen h3 { font-size:1.4rem; font-weight:800; margin-bottom:10px; }
+  .success-screen p { color:var(--muted); margin-bottom:24px; }
+
+  /* ── TOAST ── */
+  .toast { position:fixed; bottom:28px; right:28px; background:var(--surface); color:var(--text); padding:13px 20px; border-radius:9px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; z-index:400; transform:translateY(80px); opacity:0; transition:all 0.3s; border:1px solid var(--border); border-left:3px solid var(--accent); }
+  .toast.show { transform:translateY(0); opacity:1; }
+
+  /* ── FOOTER ── */
+  footer { background:var(--surface); border-top:1px solid var(--border); text-align:center; padding:28px 6%; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--dim); letter-spacing:0.05em; }
+  footer a { color:var(--muted); text-decoration:none; }
+  footer a:hover { color:var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-grid, .about-grid, .contact-grid { grid-template-columns:1fr; gap:36px; }
+    .hero-visual { display:none; }
+    nav a:not(.nav-cart) { display:none; }
+    .products-grid { grid-template-columns:1fr 1fr; }
+    .request-banner { flex-direction:column; padding:28px; }
+  }
+  @media (max-width:500px) { .products-grid { grid-template-columns:1fr; } }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  .hero h1 { animation:fadeUp 0.65s ease both; }
+  .hero-sub { animation:fadeUp 0.65s 0.12s ease both; }
+  .hero-perks { animation:fadeUp 0.65s 0.22s ease both; }
+  .hero-btns { animation:fadeUp 0.65s 0.32s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-mark">3D</div>
+    <div class="logo-name">3DA<span>Prints</span></div>
+  </a>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <button class="nav-cart" onclick="openCart()">Cart <span class="cart-badge" id="cartBadge">0</span></button>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">🖨️ Custom 3D Printed Accessories</div>
+      <h1>Your gear,<br><span class="grad">your way.</span></h1>
+      <p class="hero-sub">Precision-printed firearm accessories and custom 3D creations — built to fit, built to last.</p>
+      <div class="hero-perks">
+        <div class="perk"><div class="dot"></div><span>Personalized touch on every order</span></div>
+        <div class="perk"><div class="dot"></div><span>Free replacement on broken parts — 2 year warranty</span></div>
+        <div class="perk"><div class="dot"></div><span>Don't see it? Request a custom print</span></div>
+        <div class="perk"><div class="dot"></div><span>Great customer service, always</span></div>
+      </div>
+      <div class="hero-btns">
+        <a href="#shop" class="btn-primary">Shop Now</a>
+        <a href="#contact" class="btn-outline">Request a Custom Print</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card"><span>🔭</span><span class="hero-card-label">Red Dot Mounts</span></div>
+      <div class="hero-card"><span>🎨</span><span class="hero-card-label">Custom Cosmetics</span></div>
+      <div class="hero-card"><span>⚙️</span><span class="hero-card-label">Accessories</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="trust-item">🛡️ <strong>2-Year Warranty</strong> — Free part replacements</div>
+  <div class="trust-item">🎯 <strong>Personalized</strong> — Every order gets a personal touch</div>
+  <div class="trust-item">📦 <strong>Made to Order</strong> — Custom prints available</div>
+  <div class="trust-item">💬 <strong>Real Support</strong> — Talk directly to the maker</div>
+</div>
+
+<!-- ── SHOP ── -->
+<section id="shop">
+  <p class="section-eyebrow">Fresh from the printer</p>
+  <h2 class="section-title">Available Now</h2>
+  <p class="section-sub">All items printed on demand. Ships within 3–5 business days. Don't see what you need? Request it below.</p>
+  <div class="products-grid" id="productsGrid"></div>
+
+  <div class="request-banner">
+    <div>
+      <h3>🔧 Need something custom?</h3>
+      <p>Don't see what you're looking for? Send a request and I'll design and print it for you. Bring your idea — I'll bring it to life.</p>
+    </div>
+    <a href="#contact" class="btn-primary">Request a Custom Print →</a>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <p class="section-eyebrow">The maker behind the machine</p>
+      <h2 class="section-title">Hi, I'm Bill.</h2>
+      <p>3DAPrints started as a passion project and turned into something real. Every accessory, mount, and custom piece you see here was designed and printed by me in my own workshop.</p>
+      <p>I specialize in firearm accessories — think cosmetic upgrades, red dot mounts, and ergonomic add-ons — alongside all kinds of custom 3D creations. No part I make requires a license or registration anywhere.</p>
+      <p>What sets me apart? A personalized touch on every order, honest customer service, and a 2-year free replacement warranty on any broken parts. I stand behind my work.</p>
+      <a href="#shop" class="btn-primary" style="margin-top:8px">Browse the Shop</a>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box"><span class="stat-num">500+</span><span class="stat-label">Items Printed</span></div>
+      <div class="stat-box"><span class="stat-num">2yr</span><span class="stat-label">Part Warranty</span></div>
+      <div class="stat-box"><span class="stat-num">100%</span><span class="stat-label">Handcrafted</span></div>
+      <div class="stat-box"><span class="stat-num">⭐⭐⭐⭐⭐</span><span class="stat-label">Customer Reviews</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-grid">
+    <div>
+      <p class="section-eyebrow">Get in touch</p>
+      <h2 class="section-title">Questions?<br>Custom Order?</h2>
+      <p class="section-sub" style="margin-bottom:28px">Reach out about custom prints, bulk orders, or anything else. I respond fast.</p>
+      <div class="contact-info-item">
+        <div class="ci-icon">📬</div>
+        <div class="ci-text"><strong>Email</strong><span>billydolan4@gmail.com</span></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">📦</div>
+        <div class="ci-text"><strong>Shipping</strong><span>Ships within 3–5 business days</span></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">🔄</div>
+        <div class="ci-text"><strong>Warranty</strong><span>2-year free replacement on broken parts</span></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <input type="text" placeholder="Your name">
+      <input type="email" placeholder="Email address">
+      <input type="text" placeholder="What do you need printed? (optional)">
+      <textarea placeholder="Tell me more about your order or question..."></textarea>
+      <button class="btn-primary" style="width:100%" onclick="showToast('Message sent! Bill will be in touch soon. 📬')">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2025 <strong style="color:var(--muted)">3DAPrints</strong> — Handcrafted 3D accessories by Bill Dolan &nbsp;·&nbsp; <a href="mailto:billydolan4@gmail.com">billydolan4@gmail.com</a></p>
+</footer>
+
+<!-- ── CART SIDEBAR ── -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>🛒 Cart</h2>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="total-label">Total</span>
+      <span class="total-amount" id="cartTotal">$0.00</span>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- ── PAYMENT MODAL ── -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>💳 Checkout</h2>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div id="summaryLines"></div>
+        <div class="summary-line summary-total"><span>Total</span><span id="summaryTotal">$0.00</span></div>
+      </div>
+
+      <div class="pay-tabs">
+        <button class="pay-tab active" onclick="switchTab('venmo',this)">Venmo</button>
+        <button class="pay-tab" onclick="switchTab('cash',this)">Cash App</button>
+        <button class="pay-tab" onclick="switchTab('xmr',this)">Monero</button>
+        <button class="pay-tab" onclick="switchTab('btc',this)">Bitcoin</button>
+        <button class="pay-tab" onclick="switchTab('card',this)">Card</button>
+      </div>
+
+      <!-- VENMO -->
+      <div class="pay-panel active" id="panel-venmo">
+        <div class="pay-center">
+          <p class="pay-note">Send payment directly on Venmo:</p>
+          <div class="pay-handle">@billdolan14</div>
+          <div class="pay-instructions">
+            <p>1. Open Venmo → tap <strong>Pay or Request</strong></p>
+            <p>2. Search <strong>@billdolan14</strong></p>
+            <p>3. Enter amount: <strong id="venmoAmt">$0.00</strong></p>
+            <p>4. Note your items, tap <strong>Pay</strong></p>
+          </div>
+          <button class="pay-confirm-btn" onclick="confirmOrder('Venmo')">I've Sent the Payment ✓</button>
+        </div>
+      </div>
+
+      <!-- CASH APP -->
+      <div class="pay-panel" id="panel-cash">
+        <div class="pay-center">
+          <p class="pay-note">Send payment on Cash App:</p>
+          <div class="pay-handle">$billdolan10</div>
+          <div class="pay-instructions">
+            <p>1. Open Cash App → tap <strong>Pay</strong></p>
+            <p>2. Search <strong>$billdolan10</strong></p>
+            <p>3. Enter amount: <strong id="cashAmt">$0.00</strong></p>
+            <p>4. Add your order in the note, tap <strong>Pay</strong></p>
+          </div>
+          <button class="pay-confirm-btn" onclick="confirmOrder('Cash App')">I've Sent the Payment ✓</button>
+        </div>
+      </div>
+
+      <!-- XMR -->
+      <div class="pay-panel" id="panel-xmr">
+        <div class="pay-center">
+          <p class="pay-note">Pay with Monero (XMR):</p>
+          <div class="crypto-address">8A4x7entv3LF71b9Ly1CWwGFvFPWQocbGj6h9owbqVumc6xJceQws4qB2CoxYAVQoddDQMVXEwGqDNdLhh7uDwrbTHa3h1n</div>
+          <button class="copy-btn" onclick="copyText('8A4x7entv3LF71b9Ly1CWwGFvFPWQocbGj6h9owbqVumc6xJceQws4qB2CoxYAVQoddDQMVXEwGqDNdLhh7uDwrbTHa3h1n')">📋 Copy Address</button>
+          <div class="pay-instructions" style="margin-top:14px">
+            <p>1. Send exactly <strong id="xmrAmt">$0.00</strong> worth of XMR</p>
+            <p>2. After sending, email <strong>billydolan4@gmail.com</strong> with your TX ID and order</p>
+          </div>
+          <button class="pay-confirm-btn" onclick="confirmOrder('Monero (XMR)')">I've Sent the Payment ✓</button>
+        </div>
+      </div>
+
+      <!-- BTC -->
+      <div class="pay-panel" id="panel-btc">
+        <div class="pay-center">
+          <p class="pay-note">Pay with Bitcoin (BTC):</p>
+          <div class="crypto-address">bc1q4fn5rq7yh092aa6gx7xmyf29fq5cmmdj7v2kkl</div>
+          <button class="copy-btn" onclick="copyText('bc1q4fn5rq7yh092aa6gx7xmyf29fq5cmmdj7v2kkl')">📋 Copy Address</button>
+          <div class="pay-instructions" style="margin-top:14px">
+            <p>1. Send exactly <strong id="btcAmt">$0.00</strong> worth of BTC</p>
+            <p>2. After sending, email <strong>billydolan4@gmail.com</strong> with your TX ID and order</p>
+          </div>
+          <button class="pay-confirm-btn" onclick="confirmOrder('Bitcoin (BTC)')">I've Sent the Payment ✓</button>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="pay-panel" id="panel-card">
+        <div class="form-row"><label>Cardholder Name</label><input type="text" placeholder="Bill Dolan"></div>
+        <div class="form-row"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+        <div class="form-row"><label>Card Number</label><input type="text" placeholder="•••• •••• •••• ••••" maxlength="19" oninput="fmtCard(this)"></div>
+        <div class="form-row-split">
+          <div class="form-row" style="margin-bottom:0"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7" oninput="fmtExpiry(this)"></div>
+          <div class="form-row" style="margin-bottom:0"><label>CVV</label><input type="text" placeholder="•••" maxlength="4"></div>
+        </div>
+        <div class="stripe-note-box">
+          <p>⚙️ Stripe Integration Required</p>
+          <p>To accept real card payments, add your Stripe publishable key and integrate <code>Stripe.js</code> via the <code>initStripe()</code> function. Visit <strong>stripe.com</strong> to set up a free account.</p>
+        </div>
+        <button class="pay-now-btn" onclick="confirmOrder('Card')">Pay <span id="payBtnAmt">$0.00</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN ── -->
+<button class="admin-toggle" onclick="toggleAdmin()">⚙️ Manage Listings</button>
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-header">
+    <h3>🖨️ Admin — 3DAPrints</h3>
+    <button class="close-btn" onclick="toggleAdmin()">✕</button>
+  </div>
+  <div class="admin-body">
+    <label>Product Name</label><input type="text" id="adName" placeholder="e.g. Picatinny Rail Mount">
+    <label>Description</label><input type="text" id="adDesc" placeholder="Short description">
+    <label>Price ($)</label><input type="number" id="adPrice" placeholder="14.99" step="0.01">
+    <label>Emoji Icon</label><input type="text" id="adEmoji" placeholder="🔭" maxlength="2">
+    <label>Status</label>
+    <select id="adStatus">
+      <option value="available">Available</option>
+      <option value="new">New</option>
+      <option value="popular">Popular</option>
+      <option value="custom">Custom Only</option>
+      <option value="sold-out">Sold Out</option>
+    </select>
+    <button class="admin-add-btn" onclick="addProduct()">+ Add Listing</button>
+    <div class="admin-items-list" id="adminItemsList"></div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+let products = [
+  // ── KILLFLASH / ARDs ──
+  {id:1,name:"Killflash ARD — Sig Romeo 5",desc:"Anti-reflection device for Sig Sauer Romeo 5 red dot. Snap-fit, reduces glint and protects lens.",price:11.00,emoji:"🎯",status:"popular"},
+  {id:2,name:"Killflash ARD — EOTech EXPS/XPS/558",desc:"Precision-fit killflash for EOTech EXPS, XPS, and 558 holographic sights. No tools needed.",price:20.00,emoji:"🌀",status:"available"},
+  {id:3,name:"Killflash ARD — Vortex Sparc",desc:"Anti-reflection device for Vortex Sparc AR and Sparc 2. Honeycomb grid, snap-fit install.",price:11.00,emoji:"🎯",status:"available"},
+  {id:4,name:"Killflash ARD — Aimpoint PRO",desc:"Killflash insert for Aimpoint PRO optic. Reduces signature, protects front lens.",price:13.00,emoji:"🎯",status:"available"},
+  {id:5,name:"Killflash ARD — Vortex Crossfire Red Dot",desc:"Drop-in killflash for Vortex Crossfire red dot sight. Friction fit, easy remove.",price:11.00,emoji:"🎯",status:"new"},
+  {id:6,name:"Killflash ARD — Primary Arms SLx",desc:"Honeycomb ARD for Primary Arms SLx micro dot series. Tight tolerance print.",price:11.00,emoji:"🎯",status:"available"},
+  {id:7,name:"Killflash ARD — Holosun 510C",desc:"Anti-reflection device for Holosun 510C open reflex sight. Attaches to shroud.",price:14.00,emoji:"🎯",status:"popular"},
+  {id:8,name:"Killflash ARD — Holosun 403/503",desc:"Killflash for Holosun 403B, 403C, 503G, and 503R compact dots. Snap-fit.",price:11.00,emoji:"🎯",status:"available"},
+  {id:9,name:"Killflash ARD — Bushnell TRS-25",desc:"Anti-reflection honeycomb device for Bushnell TRS-25 red dot. Budget-friendly protection.",price:10.00,emoji:"🎯",status:"available"},
+  {id:10,name:"Killflash ARD — Trijicon MRO",desc:"Precision killflash for Trijicon MRO patrol and patrol solar. Reduces front glare.",price:14.00,emoji:"🎯",status:"available"},
+
+  // ── LENS COVERS ──
+  {id:11,name:"Scope Lens Cover Set — 40mm",desc:"Flip-open objective and ocular lens covers for 40mm scopes. Protects glass from dust and impact.",price:11.00,emoji:"🔭",status:"popular"},
+  {id:12,name:"Scope Lens Cover Set — 44mm",desc:"Flip-open lens cover set for 44mm objectives. Snug friction fit, opens one-handed.",price:11.00,emoji:"🔭",status:"available"},
+  {id:13,name:"Scope Lens Cover Set — 50mm",desc:"Protective flip covers for 50mm large objective scopes. Durable PLA+.",price:11.00,emoji:"🔭",status:"available"},
+  {id:14,name:"Scope Lens Cover Set — 56mm",desc:"Extra-large flip covers for 56mm objectives. Keeps your glass pristine in the field.",price:12.00,emoji:"🔭",status:"available"},
+  {id:15,name:"Weapon Light Lens Cover — Surefire Scout",desc:"Protective TPU lens cover for Surefire Scout light series. Flip-open design.",price:9.00,emoji:"🔦",status:"popular"},
+  {id:16,name:"Weapon Light Lens Cover — Streamlight ProTac Rail",desc:"Lens cover for Streamlight ProTac Rail Mount 1 and HL-X. Snap-fit TPU.",price:9.00,emoji:"🔦",status:"available"},
+  {id:17,name:"Weapon Light Lens Cover — Olight Baldr",desc:"Flip-open lens cover for Olight Baldr Pro and Baldr Mini combo lights.",price:9.00,emoji:"🔦",status:"new"},
+  {id:18,name:"Weapon Light Lens Cover — Inforce WML",desc:"Protective lens cap for Inforce WML weapon light. Flexible TPU, stays attached when open.",price:9.00,emoji:"🔦",status:"available"},
+  {id:19,name:"Red Dot Lens Cover — Trijicon RMR",desc:"Dust and scratch cover for Trijicon RMR and RMRcc. Protects when holstered.",price:8.00,emoji:"🔭",status:"available"},
+  {id:20,name:"Red Dot Lens Cover — Holosun 407/507",desc:"Slip-on lens cover for Holosun 407C and 507C pistol dots. Easy on/off.",price:8.00,emoji:"🔭",status:"new"},
+
+  // ── SCOPE SUNSHADES ──
+  {id:21,name:"Scope Sunshade — 40mm",desc:"Anti-glare sunshade extension for 40mm objective lenses. Reduces washout in bright light.",price:9.00,emoji:"🌑",status:"available"},
+  {id:22,name:"Scope Sunshade — 44mm",desc:"Extended sunshade for 44mm objectives. Threads onto standard objective bells.",price:9.00,emoji:"🌑",status:"available"},
+  {id:23,name:"Scope Sunshade — 50mm",desc:"Long sunshade for 50mm scopes. Improves contrast in direct sunlight.",price:9.00,emoji:"🌑",status:"available"},
+  {id:24,name:"Scope Sunshade — 56mm",desc:"Heavy-duty sunshade for 56mm large-objective hunting scopes.",price:10.00,emoji:"🌑",status:"available"},
+
+  // ── FLARED MAGWELLS ──
+  {id:25,name:"AR-15 Friction-Fit Flared Magwell",desc:"Drop-in flared magwell for mil-spec AR-15 lowers. No tools or hardware — pure friction fit. PETG.",price:22.00,emoji:"⬇️",status:"popular"},
+  {id:26,name:"AR-9 Flared Magwell — Colt SMG Pattern",desc:"Friction-fit magwell for AR-9 Colt SMG pattern lowers. Great for competition use.",price:22.00,emoji:"⬇️",status:"available"},
+  {id:27,name:"AR-9 Flared Magwell — Glock Pattern",desc:"Flared magwell for AR-9 builds using Glock-pattern magazines. Snap-in fit.",price:22.00,emoji:"⬇️",status:"available"},
+  {id:28,name:"Glock 17/34 Magwell",desc:"Snap-on flared magwell for Glock 17 and 34. Improves reload speed with a wide funnel.",price:13.00,emoji:"⬇️",status:"popular"},
+  {id:29,name:"Glock 19/23 Magwell",desc:"Friction-fit flared magwell for Glock 19 and 23 compact frames.",price:13.00,emoji:"⬇️",status:"available"},
+  {id:30,name:"Glock 43/43X Magwell",desc:"Slim magwell funnel for Glock 43 and 43X single-stack and Shield Arms mags.",price:12.00,emoji:"⬇️",status:"new"},
+  {id:31,name:"CZ P10C Magwell",desc:"Flared magwell for CZ P10C. Drop-in fit, no modification needed.",price:13.00,emoji:"⬇️",status:"available"},
+  {id:32,name:"CZ 75/Shadow 2 Magwell",desc:"Competition magwell for CZ 75 and Shadow 2 platform. Wide funnel for fast reloads.",price:14.00,emoji:"⬇️",status:"available"},
+  {id:33,name:"S&W M&P 9/40 Magwell",desc:"Snap-on magwell for Smith & Wesson M&P full-size. Fits 9mm and .40 variants.",price:13.00,emoji:"⬇️",status:"available"},
+  {id:34,name:"Sig P320 Magwell",desc:"Flared magwell funnel for Sig Sauer P320 full-size and carry. Drop-in, no tools.",price:13.00,emoji:"⬇️",status:"new"},
+  {id:35,name:"AR-10 Friction-Fit Flared Magwell",desc:"Drop-in magwell for AR-10 / .308 lowers. Fits DPMS and Armalite pattern.",price:22.00,emoji:"⬇️",status:"available"},
+
+  // ── CHEEK RISERS ──
+  {id:36,name:"CAR-15 / M4 Stock Cheek Riser — Low",desc:"Low-profile cheek riser for CAR-15 and M4 collapsible stocks. Adds 0.5\" of cheek weld height.",price:21.00,emoji:"📐",status:"popular"},
+  {id:37,name:"CAR-15 / M4 Stock Cheek Riser — Medium",desc:"Medium cheek riser for M4 stocks. Ideal height for most red dot and low-mount scope setups.",price:21.00,emoji:"📐",status:"available"},
+  {id:38,name:"CAR-15 / M4 Stock Cheek Riser — High",desc:"High cheek riser for M4 stocks. Designed for tall scope mounts and night vision setups.",price:22.00,emoji:"📐",status:"available"},
+  {id:39,name:"Mil-Spec Buffer Tube Cheek Riser",desc:"Universal cheek riser wraps around mil-spec buffer tubes. Hook-and-loop attachment, fully adjustable.",price:17.00,emoji:"📐",status:"available"},
+  {id:40,name:"Commercial Buffer Tube Cheek Riser",desc:"Cheek riser for commercial-spec buffer tubes. Raises cheek weld for optic co-witness.",price:17.00,emoji:"📐",status:"available"},
+  {id:41,name:"Magpul CTR/MOE Stock Cheek Riser",desc:"Slip-on cheek riser designed for Magpul CTR and MOE stocks. Clean look, secure fit.",price:20.00,emoji:"📐",status:"new"},
+  {id:42,name:"AK Cheek Riser — Fixed Stock",desc:"Slip-on cheek riser for AK fixed stocks. Raises eye level for optic mounting.",price:19.00,emoji:"📐",status:"available"},
+  {id:43,name:"Ruger 10/22 Cheek Riser",desc:"Cheek riser for Ruger 10/22 factory stock. Perfect for adding a red dot or scope.",price:18.00,emoji:"📐",status:"available"},
+
+  // ── BUFFER TUBE & STOCK ACCESSORIES ──
+  {id:44,name:"SBA3 Brace Storage Plug",desc:"Shape-retaining plug for SB Tactical SBA3 pistol brace. Keeps brace open and formed. Optional battery storage.",price:9.00,emoji:"🔋",status:"new"},
+  {id:45,name:"SBA4 Brace End Cap",desc:"Replacement/cosmetic end cap for SB Tactical SBA4 brace. Snap-fit, no tools.",price:8.00,emoji:"🔩",status:"available"},
+  {id:46,name:"Buffer Tube End Plate Cover",desc:"Decorative cover for AR-15 end plate and castle nut area. Cosmetic upgrade.",price:7.00,emoji:"⭕",status:"available"},
+  {id:47,name:"Pistol Brace Plug — Generic",desc:"Universal storage plug for most tubular pistol braces. Keeps shape and adds a small storage cavity.",price:8.00,emoji:"🔋",status:"available"},
+
+  // ── WALL MOUNTS & STORAGE ──
+  {id:48,name:"AR-15 Buffer Tube Wall Mount",desc:"Vertical wall mount for AR-15 via buffer tube. Fits mil-spec and commercial. Great for display.",price:15.00,emoji:"🔩",status:"popular"},
+  {id:49,name:"AR-15 Horizontal Wall Mount",desc:"Two-point horizontal wall mount for AR-15. Mounts via handguard and stock. Low profile.",price:17.00,emoji:"🔩",status:"available"},
+  {id:50,name:"AK Wall Mount",desc:"Wall display mount for AK pattern rifles. Holds by pistol grip and stock.",price:15.00,emoji:"🔩",status:"available"},
+  {id:51,name:"Shotgun Wall Mount",desc:"Two-point wall mount for pump and semi-auto shotguns. Works with most barrel diameters.",price:15.00,emoji:"🔩",status:"available"},
+  {id:52,name:"Universal Pistol Wall Mount",desc:"Trigger guard hook wall mount for handguns. Fits full-size, compact, and subcompact frames.",price:11.00,emoji:"🔫",status:"popular"},
+  {id:53,name:"Pistol Pegboard Mount — Universal",desc:"Mounts any pistol to pegboard, IKEA Skadis, or Wall Control panels via trigger guard.",price:12.00,emoji:"🔫",status:"popular"},
+  {id:54,name:"AR-15 PMAG Pegboard Mount",desc:"Holds AR-15 PMAGs on pegboard or wall panel. Keeps mags organized and accessible.",price:15.00,emoji:"📦",status:"available"},
+  {id:55,name:"AK Mag Pegboard Mount",desc:"Pegboard mount for AK 7.62 and 5.45 magazines. Friction grip, no hardware.",price:14.00,emoji:"📦",status:"available"},
+  {id:56,name:"Glock Mag Pegboard Mount",desc:"Wall or pegboard mount for Glock 9mm and .40 double-stack magazines.",price:12.00,emoji:"📦",status:"available"},
+  {id:57,name:"AR-15 Wall Mount — Gallows Style",desc:"Gallows-style overhead AR-15 wall mount. Suspended display, very low wall footprint.",price:18.00,emoji:"🔩",status:"new"},
+  {id:58,name:"Pistol Display Stand — Single",desc:"Desktop angled stand for handguns. Fits most full-size and compact frames.",price:10.00,emoji:"🏆",status:"available"},
+  {id:59,name:"Pistol Display Stand — Double",desc:"Side-by-side desktop stand for two pistols. Great for collections.",price:16.00,emoji:"🏆",status:"available"},
+  {id:60,name:"Rifle Display Stand — Vertical",desc:"Vertical floor/desk stand for rifles and carbines. Holds by pistol grip.",price:14.00,emoji:"🏆",status:"available"},
+  {id:61,name:"Magazine Display Stand — AR-15",desc:"Angled desktop display stand for AR-15 PMAG. Clean presentation.",price:8.00,emoji:"🏆",status:"available"},
+  {id:62,name:"Handgun Safe Insert Organizer",desc:"3D printed organizer insert for small handgun safes. Holds two pistols and mags upright.",price:14.00,emoji:"🗄️",status:"new"},
+  {id:63,name:"Rifle Safe Door Panel Organizer",desc:"Snap-together panel organizer for rifle safe doors. Holds mags, tools, and accessories.",price:16.00,emoji:"🗄️",status:"available"},
+
+  // ── RAIL ACCESSORIES ──
+  {id:64,name:"Picatinny Rail Cover Set — 6 Pack",desc:"Snap-on covers for unused Picatinny / MIL-STD-1913 rail sections. Set of 6.",price:7.00,emoji:"🛡️",status:"popular"},
+  {id:65,name:"Picatinny Rail Cover Set — 12 Pack",desc:"Bulk pack of 12 Picatinny rail covers. Mix of lengths. Protects hands and rail surfaces.",price:11.00,emoji:"🛡️",status:"available"},
+  {id:66,name:"M-LOK Rail Section — 5-Slot",desc:"Add-on 5-slot Picatinny rail for M-LOK handguards. Mounts accessories anywhere.",price:9.00,emoji:"📡",status:"available"},
+  {id:67,name:"M-LOK Rail Section — 3-Slot",desc:"Short 3-slot Picatinny add-on for M-LOK handguards. Compact and lightweight.",price:8.00,emoji:"📡",status:"available"},
+  {id:68,name:"KeyMod Rail Section — 5-Slot",desc:"5-slot Picatinny rail section for KeyMod handguards.",price:9.00,emoji:"📡",status:"available"},
+  {id:69,name:"45-Degree Offset M-LOK Rail",desc:"45-degree offset Picatinny rail for M-LOK. Adds a mounting point for lights or lasers.",price:9.00,emoji:"📡",status:"new"},
+  {id:70,name:"M-LOK Hand Stop",desc:"Low-profile M-LOK hand stop. Prevents forward slide and adds a modern tactical look.",price:10.00,emoji:"✋",status:"available"},
+  {id:71,name:"M-LOK Barricade Stop",desc:"M-LOK mounted barricade stop for supported shooting positions.",price:11.00,emoji:"✋",status:"available"},
+  {id:72,name:"Picatinny Barricade Stop",desc:"Picatinny-mount barricade stop. Helps brace against barriers for stable shooting.",price:11.00,emoji:"✋",status:"available"},
+  {id:73,name:"M-LOK Cable Management Clip Set",desc:"Set of 6 M-LOK cable clips for managing light and laser wires on handguards.",price:7.00,emoji:"🔌",status:"available"},
+  {id:74,name:"Picatinny QD Sling Mount",desc:"Quick-detach sling swivel mount for Picatinny rails. Fits standard QD sling swivels.",price:10.00,emoji:"🔗",status:"available"},
+  {id:75,name:"M-LOK QD Sling Mount",desc:"QD sling swivel adapter for M-LOK handguards. Solid and lightweight.",price:10.00,emoji:"🔗",status:"available"},
+
+  // ── OPTIC MOUNTS & RISERS ──
+  {id:76,name:"Riser Mount — Low (0.5\")",desc:"Low Picatinny riser mount for red dots and scopes. Adds 0.5\" of height for co-witness.",price:12.00,emoji:"🔭",status:"available"},
+  {id:77,name:"Riser Mount — Medium (0.83\")",desc:"Medium riser for achieving absolute co-witness with iron sights. Fits most red dots.",price:12.00,emoji:"🔭",status:"popular"},
+  {id:78,name:"Riser Mount — High (1.0\")",desc:"High riser for lower-third co-witness or tall scope setups.",price:12.00,emoji:"🔭",status:"available"},
+  {id:79,name:"Offset Red Dot Mount — 45 Degree",desc:"45-degree offset mount for mounting a backup red dot alongside a primary optic.",price:14.00,emoji:"🔭",status:"new"},
+  {id:80,name:"Magnifier Flip Mount",desc:"Flip-to-side mount for 3x and 5x magnifiers. Works with most Vortex, EOTech, and Holosun magnifiers.",price:18.00,emoji:"🔭",status:"available"},
+  {id:81,name:"Scout Scope Mount — Picatinny",desc:"Forward scout scope mount for Picatinny rails. Brings optic forward for scout-style shooting.",price:14.00,emoji:"🔭",status:"available"},
+  {id:82,name:"RMR Mounting Adapter — Picatinny",desc:"Mounts Trijicon RMR / SRO to any Picatinny rail. Solid single-piece design.",price:13.00,emoji:"🔭",status:"available"},
+  {id:83,name:"Holosun 507C Picatinny Adapter",desc:"Adapter plate to mount Holosun 407C/507C on a Picatinny rail. Precise fit.",price:13.00,emoji:"🔭",status:"available"},
+
+  // ── MAGAZINE ACCESSORIES ──
+  {id:84,name:"AR-15 Mag Coupler — PMAG",desc:"Dual PMAG coupler for AR-15. Clamps two 30-round mags together for fast transitions.",price:12.00,emoji:"🔗",status:"popular"},
+  {id:85,name:"AK Mag Coupler",desc:"Side-by-side coupler for AK 7.62x39 magazines. Rigid connection, no wobble.",price:12.00,emoji:"🔗",status:"available"},
+  {id:86,name:"AR-15 Mag Coupler — Offset",desc:"Offset mag coupler keeps second mag out of the way of the ground. Works with PMAGs.",price:12.00,emoji:"🔗",status:"available"},
+  {id:87,name:"Glock 17 Extended Base Plate",desc:"Adds grip length to Glock 17 magazines. Drop-free, no modification needed.",price:9.00,emoji:"📦",status:"available"},
+  {id:88,name:"Glock 19 Extended Base Plate",desc:"Extended base plate for Glock 19 mags. Adds pinky extension and slight capacity note.",price:9.00,emoji:"📦",status:"new"},
+  {id:89,name:"AR-15 Mag Dust Cover",desc:"Snap-on dust cover for AR-15 PMAG feed lips. Keeps debris out during storage.",price:6.00,emoji:"🧹",status:"available"},
+  {id:90,name:"AK Mag Dust Cover",desc:"Protective dust cover for AK magazine feed lips. Snap-fit for most steel and polymer mags.",price:6.00,emoji:"🧹",status:"available"},
+  {id:91,name:"Pistol Mag Loader Assist",desc:"Thumb-saver mag loader assist for 9mm double-stack magazines. Reduces fatigue loading mags.",price:8.00,emoji:"👍",status:"available"},
+
+  // ── GRIP ACCESSORIES ──
+  {id:92,name:"AR-15 Pistol Grip — Ergonomic",desc:"Replacement ergonomic pistol grip for AR-15 A2 pattern. Comfortable angle and palm swell.",price:14.00,emoji:"🖐️",status:"available"},
+  {id:93,name:"AR-15 Vertical Foregrip — Short",desc:"Short vertical foregrip for Picatinny rails. Compact, lightweight PETG construction.",price:11.00,emoji:"🖐️",status:"available"},
+  {id:94,name:"AR-15 Angled Foregrip — M-LOK",desc:"Angled foregrip for M-LOK handguards. Comfortable ergonomic angle for support hand.",price:12.00,emoji:"🖐️",status:"popular"},
+  {id:95,name:"AR-15 Angled Foregrip — Picatinny",desc:"Angled foregrip for Picatinny rails. Low-profile and lightweight.",price:12.00,emoji:"🖐️",status:"available"},
+  {id:96,name:"Glock Backstrap Grip Extension",desc:"Extended backstrap attachment for Glock frames. Improves grip angle and hand fill.",price:10.00,emoji:"🖐️",status:"new"},
+  {id:97,name:"Pistol Grip Wrap — Universal",desc:"Textured wrap for pistol grips. Improves purchase in wet conditions. Multiple colors available.",price:9.00,emoji:"🖐️",status:"available"},
+  {id:98,name:"AK Pistol Grip — Ergonomic",desc:"Drop-in ergonomic pistol grip for AKM pattern rifles. Standard AK thread pattern.",price:14.00,emoji:"🖐️",status:"available"},
+
+  // ── SUPPRESSOR / SILENCER ACCESSORIES ──
+  {id:99,name:"Suppressor Cover — 6\" QD",desc:"Cosmetic wrap/cover for 6-inch QD suppressors. Heat resistant PLA+. Multiple color options.",price:14.00,emoji:"🔇",status:"available"},
+  {id:100,name:"Suppressor Cover — 8\" QD",desc:"Cosmetic cover for 8-inch QD cans. Snap-wrap design for easy removal.",price:15.00,emoji:"🔇",status:"available"},
+  {id:101,name:"Suppressor End Cap — 1/2x28",desc:"Cosmetic thread protector / end cap for 1/2x28 threaded suppressors.",price:8.00,emoji:"⭕",status:"available"},
+  {id:102,name:"Baffle Alignment Tool — 9mm",desc:"Alignment tool for 9mm/.45 suppressor baffles during cleaning and reassembly.",price:12.00,emoji:"🔧",status:"available"},
+  {id:103,name:"Baffle Alignment Tool — .30 Cal",desc:"Baffle alignment rod for .30 caliber / 7.62 suppressors.",price:12.00,emoji:"🔧",status:"available"},
+  {id:104,name:"Silencer Pegboard / Wall Mount",desc:"Pegboard mount to store your suppressor horizontally. Fits most 1.5\" diameter cans.",price:13.00,emoji:"📦",status:"available"},
+
+  // ── THREAD PROTECTORS & MUZZLE DEVICES ──
+  {id:105,name:"Thread Protector — 1/2x28",desc:"Cosmetic thread protector for 1/2x28 threaded muzzles. Protects threads when no device is attached.",price:6.00,emoji:"⭕",status:"popular"},
+  {id:106,name:"Thread Protector — 5/8x24",desc:"Thread cap for 5/8x24 muzzle threads. Common on .308 and .30 cal barrels.",price:6.00,emoji:"⭕",status:"available"},
+  {id:107,name:"Thread Protector — M14x1 LH",desc:"Left-hand thread protector for AK pattern M14x1 LH muzzle threads.",price:6.00,emoji:"⭕",status:"available"},
+  {id:108,name:"Muzzle Cap — Decorative",desc:"Custom decorative muzzle cap with unique geometric pattern. Multiple designs available.",price:8.00,emoji:"🎨",status:"new"},
+
+  // ── HOLSTERS & CARRY ──
+  {id:109,name:"OWB Holster — Glock 17/22",desc:"Outside-waistband holster for Glock 17 and 22. Adjustable cant, fits standard OWB belts.",price:18.00,emoji:"🔫",status:"available"},
+  {id:110,name:"OWB Holster — Glock 19/23",desc:"OWB holster for Glock 19/23 compact. Passive retention, adjustable ride height.",price:18.00,emoji:"🔫",status:"popular"},
+  {id:111,name:"OWB Holster — Sig P320",desc:"Outside-waistband holster for Sig Sauer P320 full-size and carry.",price:18.00,emoji:"🔫",status:"available"},
+  {id:112,name:"OWB Holster — CZ P10C",desc:"OWB holster for CZ P10C. Secure passive retention, standard belt slots.",price:18.00,emoji:"🔫",status:"available"},
+  {id:113,name:"OWB Holster — S&W M&P 9",desc:"Printed OWB holster for S&W M&P 9mm full-size.",price:18.00,emoji:"🔫",status:"available"},
+  {id:114,name:"OWB Holster — 1911 5\"",desc:"Government-size 1911 OWB holster. Fits most 5\" 1911 frames.",price:18.00,emoji:"🔫",status:"available"},
+  {id:115,name:"Magazine Carrier — Single Glock",desc:"OWB single magazine carrier for Glock double-stack mags. Adjustable cant.",price:12.00,emoji:"📦",status:"available"},
+  {id:116,name:"Magazine Carrier — Double AR-15",desc:"Dual AR-15 PMAG carrier for belt. Holds two mags at a practical draw angle.",price:15.00,emoji:"📦",status:"new"},
+  {id:117,name:"Safariland ELS Fork — Printed",desc:"Replacement / compatible ELS fork for Safariland QLS/ELS mounting system.",price:10.00,emoji:"🔩",status:"available"},
+
+  // ── GOPRO & CAMERA ──
+  {id:118,name:"GoPro Picatinny Rail Mount",desc:"Mounts a GoPro or action cam to any Picatinny rail. Swivel adapter for angle adjustment.",price:11.00,emoji:"📷",status:"available"},
+  {id:119,name:"GoPro M-LOK Mount",desc:"Direct M-LOK mounted GoPro adapter. Low-profile, secure mount.",price:11.00,emoji:"📷",status:"available"},
+  {id:120,name:"GoPro Stock Mount",desc:"Mounts GoPro to buffer tube or M4 stock. Great for shooting POV footage.",price:11.00,emoji:"📷",status:"new"},
+
+  // ── CLEANING & MAINTENANCE ──
+  {id:121,name:"AR-15 Cleaning Rod Guide",desc:"Chamber guide rod for AR-15 cleaning. Keeps patches and brushes centered.",price:8.00,emoji:"🧹",status:"available"},
+  {id:122,name:"Pistol Cleaning Mat Holder",desc:"Printed frame to hold cleaning mat at an angle. Keeps work area tidy.",price:9.00,emoji:"🧹",status:"available"},
+  {id:123,name:"Bore Guide — .30 Cal",desc:"Bore guide for .30 caliber bolt-action rifles. Protects chamber during cleaning.",price:10.00,emoji:"🧹",status:"available"},
+  {id:124,name:"AR-15 Lower Vise Block",desc:"Printed vise block for AR-15 lower receiver. Holds lower securely for work.",price:13.00,emoji:"🔧",status:"available"},
+  {id:125,name:"AR-15 Upper Vise Block",desc:"Upper receiver vise block for AR-15. Works with standard bench vises.",price:13.00,emoji:"🔧",status:"available"},
+  {id:126,name:"Glock Armorer's Tool Block",desc:"Holds Glock frame during disassembly and reassembly. No more fighting the frame.",price:11.00,emoji:"🔧",status:"new"},
+  {id:127,name:"1911 Disassembly Tool",desc:"Printed bushing wrench and disassembly aid for 1911 pattern pistols.",price:9.00,emoji:"🔧",status:"available"},
+  {id:128,name:"Snap Cap Set — 9mm (x5)",desc:"Set of 5 printed 9mm snap caps for dry fire practice and trigger work.",price:8.00,emoji:"🔵",status:"popular"},
+  {id:129,name:"Snap Cap Set — .223/5.56 (x5)",desc:"Set of 5 printed .223/5.56 snap caps for malfunction drills and dry fire.",price:8.00,emoji:"🔵",status:"available"},
+  {id:130,name:"Snap Cap Set — .308 (x5)",desc:"Set of 5 .308 / 7.62x51 snap caps for bolt-action dry fire and function testing.",price:8.00,emoji:"🔵",status:"available"},
+
+  // ── RANGE ACCESSORIES ──
+  {id:131,name:"Shot Timer Belt Clip",desc:"Printed belt clip for common shot timers (PAR, PACT, Competition Electronics). Secure hold.",price:8.00,emoji:"⏱️",status:"available"},
+  {id:132,name:"Target Stand — T-Post Adapter",desc:"Adapter clips printed target hangers onto T-posts. Holds cardboard and paper targets.",price:9.00,emoji:"🎯",status:"available"},
+  {id:133,name:"Target Hanger — 1\" Conduit",desc:"Printed hanger for mounting targets on 1\" steel or PVC conduit stands.",price:7.00,emoji:"🎯",status:"available"},
+  {id:134,name:"Pistol Magazine Base Flag",desc:"Safety flag insert for pistol magazines. Bright orange — shows clear during inspection.",price:5.00,emoji:"🚩",status:"popular"},
+  {id:135,name:"Rifle Magazine Base Flag",desc:"Safety inspection flag for AR-15 and AK magazines. Bright orange insert.",price:5.00,emoji:"🚩",status:"popular"},
+  {id:136,name:"Chamber Flag — AR-15",desc:"Bright chamber safety flag for AR-15. Shows chamber is clear at the range.",price:5.00,emoji:"🚩",status:"available"},
+  {id:137,name:"Chamber Flag — AK",desc:"Safety inspection flag for AK pattern rifles. Fits 7.62x39 and 5.45x39.",price:5.00,emoji:"🚩",status:"available"},
+  {id:138,name:"Chamber Flag — Pistol Universal",desc:"Universal pistol chamber flag. Fits most semi-auto pistol chambers.",price:5.00,emoji:"🚩",status:"available"},
+  {id:139,name:"Ammo Box Insert Organizer",desc:"Printed insert for MTM and Plano ammo boxes. Keeps rounds from rolling and rattling.",price:8.00,emoji:"📦",status:"available"},
+  {id:140,name:"Shooting Bag Fill Plug",desc:"Replacement fill plug for leather and fabric shooting bags / rests.",price:6.00,emoji:"🎒",status:"available"},
+
+  // ── LIGHT & LASER MOUNTS ──
+  {id:141,name:"Flashlight Picatinny Mount — 1\"",desc:"Mounts any 1-inch diameter flashlight to a Picatinny rail. Adjustable clamp.",price:10.00,emoji:"🔦",status:"available"},
+  {id:142,name:"Flashlight Picatinny Mount — 1.125\"",desc:"Picatinny rail mount for 1.125\" diameter flashlights (Surefire, Streamlight).",price:10.00,emoji:"🔦",status:"available"},
+  {id:143,name:"Pressure Switch Rail Mount",desc:"Mounts light or laser remote pressure switches to Picatinny or M-LOK rails.",price:8.00,emoji:"🔌",status:"available"},
+  {id:144,name:"Laser Sight Picatinny Adapter",desc:"Adapter to mount small laser sights to standard Picatinny rails.",price:9.00,emoji:"🔴",status:"new"},
+
+  // ── BIPODS & SUPPORTS ──
+  {id:145,name:"Bipod Picatinny Adapter",desc:"Adapter to mount Harris-style bipods to Picatinny rails. Solid PETG construction.",price:11.00,emoji:"⚙️",status:"available"},
+  {id:146,name:"Bipod M-LOK Adapter",desc:"M-LOK adapter for Harris and Atlas-style bipods. Rigid and lightweight.",price:11.00,emoji:"⚙️",status:"available"},
+  {id:147,name:"Monopod Rear Support",desc:"Rear monopod support that attaches to standard buffer tube. Adjustable height.",price:14.00,emoji:"⚙️",status:"new"},
+
+  // ── SLING ACCESSORIES ──
+  {id:148,name:"Single-Point Sling Adapter — Buffer Tube",desc:"Converts buffer tube to single-point sling attachment. Rotates 360 degrees.",price:10.00,emoji:"🔗",status:"available"},
+  {id:149,name:"Two-Point Sling Loop — M-LOK",desc:"M-LOK mounted sling loop for two-point sling attachment.",price:8.00,emoji:"🔗",status:"available"},
+  {id:150,name:"Two-Point Sling Loop — Picatinny",desc:"Picatinny rail sling loop. Strong single-piece design.",price:8.00,emoji:"🔗",status:"available"},
+  {id:151,name:"VTAC-Style Sling Keeper",desc:"Set of 3 printed sling keepers/loops to manage sling slack.",price:6.00,emoji:"🔗",status:"available"},
+
+  // ── SHOTGUN ACCESSORIES ──
+  {id:152,name:"Shotgun Shell Saddle — 4 Round",desc:"Side saddle shell carrier for pump and semi-auto shotguns. Holds 4 rounds on receiver.",price:13.00,emoji:"🔴",status:"available"},
+  {id:153,name:"Shotgun Shell Saddle — 6 Round",desc:"6-round shell saddle for shotguns. Easy to load and access under stress.",price:15.00,emoji:"🔴",status:"popular"},
+  {id:154,name:"Shotgun Forend Shell Holder",desc:"Attaches to shotgun forend to hold 4 spare shells within reach.",price:12.00,emoji:"🔴",status:"available"},
+  {id:155,name:"Mossberg 500 Safety Button — Extended",desc:"Extended oversized safety button for Mossberg 500/590. Easy reach with gloves.",price:7.00,emoji:"🔴",status:"new"},
+  {id:156,name:"Shotgun Rail Adapter — Mossberg 500",desc:"Picatinny rail adapter for Mossberg 500 receiver. Adds optic mounting capability.",price:14.00,emoji:"📡",status:"available"},
+
+  // ── PISTOL ACCESSORIES ──
+  {id:157,name:"Glock Frame Rail Cover",desc:"Cosmetic accessory rail cover for Glock frames with accessory rails. Clean look.",price:6.00,emoji:"🎨",status:"available"},
+  {id:158,name:"Glock Trigger Guard Extension",desc:"Wrap-around trigger guard extension for Glock pistols. Improves two-handed grip.",price:8.00,emoji:"🖐️",status:"available"},
+  {id:159,name:"1911 Grip Screw Bushing — Decorative",desc:"Decorative replacement grip screw bushings for 1911 pistols. Hex pattern.",price:7.00,emoji:"🎨",status:"available"},
+  {id:160,name:"Sig P320 Grip Module Cover",desc:"Cosmetic side panels for Sig P320 grip module. Custom texture options.",price:10.00,emoji:"🎨",status:"new"},
+  {id:161,name:"Pistol Frame Rail Plug",desc:"Rail plug for picatinny rail on pistol frames when no light or laser is attached.",price:5.00,emoji:"🔒",status:"available"},
+
+  // ── AR-15 COSMETIC & MISC ──
+  {id:162,name:"Forward Assist Cover — Decorative",desc:"Decorative cover for AR-15 forward assist. Custom geometric designs.",price:7.00,emoji:"🎨",status:"available"},
+  {id:163,name:"Dust Cover Replacement — AR-15",desc:"Replacement cosmetic dust cover door for AR-15 ejection port.",price:8.00,emoji:"🎨",status:"available"},
+  {id:164,name:"AR-15 Trigger Guard — Flared",desc:"Flared drop-in trigger guard for AR-15 lowers. More room for gloved shooting.",price:9.00,emoji:"⭕",status:"available"},
+  {id:165,name:"AR-15 Trigger Guard — Winter",desc:"Extra-large winter trigger guard for AR-15. Accommodates thick gloves.",price:10.00,emoji:"⭕",status:"new"},
+  {id:166,name:"Castle Nut Wrench — AR-15",desc:"Printed castle nut wrench for AR-15 buffer tube installation.",price:8.00,emoji:"🔧",status:"available"},
+  {id:167,name:"A2 Flash Hider Cover — Decorative",desc:"Cosmetic slip-over cover for A2 flash hiders. Unique designs, no permanent modification.",price:7.00,emoji:"🎨",status:"available"},
+  {id:168,name:"AR-15 Bolt Catch Extension",desc:"Extended bolt catch paddle for AR-15. Easier to hit under stress or with gloves.",price:9.00,emoji:"⚙️",status:"available"},
+  {id:169,name:"Mag Release Button — Extended AR-15",desc:"Extended mag release button for AR-15 lowers. Faster mag drops.",price:8.00,emoji:"⚙️",status:"available"},
+  {id:170,name:"Takedown Pin Detent Tool",desc:"Printed tool to compress takedown and pivot pin detents during AR-15 assembly.",price:7.00,emoji:"🔧",status:"available"},
+
+  // ── EDC & EVERYDAY ──
+  {id:171,name:"Pocket Holster — Glock 43",desc:"Printed pocket holster for Glock 43/43X. Stays in pocket on draw.",price:13.00,emoji:"👖",status:"available"},
+  {id:172,name:"Pocket Holster — Sig P365",desc:"Pocket holster for Sig P365 and P365XL. Breaks up printing in pocket.",price:13.00,emoji:"👖",status:"popular"},
+  {id:173,name:"Pocket Holster — Ruger LCP",desc:"Minimalist pocket holster for Ruger LCP and LCP II.",price:12.00,emoji:"👖",status:"available"},
+  {id:174,name:"Ankle Holster Strap — Universal",desc:"Printed ankle rig frame for small pistols. Pairs with neoprene straps.",price:14.00,emoji:"👟",status:"available"},
+  {id:175,name:"IWB Clip — Universal",desc:"Replacement or upgrade IWB clip for inside-waistband holsters. 1.5\" belt width.",price:7.00,emoji:"🔗",status:"available"},
+
+  // ── SPECIALTY & FUN ──
+  {id:176,name:"Glock Cerakote Plug Set",desc:"Dummy plug set to fill accessory rail slots during Cerakote or Duracoat finishing.",price:6.00,emoji:"🎨",status:"available"},
+  {id:177,name:"Nerf Picatinny Rail Adapter",desc:"Mounts NERF dart accessories to Picatinny-equipped toys and props.",price:8.00,emoji:"🎉",status:"new"},
+  {id:178,name:"Airsoft Optic Riser",desc:"Low and medium optic risers for airsoft rifles with standard Picatinny rails.",price:10.00,emoji:"🔭",status:"available"},
+  {id:179,name:"Airsoft Mag Coupler — M4",desc:"Dual mag coupler for standard airsoft M4 Hi-Cap and mid-cap magazines.",price:10.00,emoji:"🔗",status:"available"},
+  {id:180,name:"Prop / Cosplay Muzzle Brake",desc:"Large decorative muzzle device for props and cosplay builds. Various designs.",price:10.00,emoji:"🎭",status:"available"},
+  {id:181,name:"Prop Rail Accessories Set",desc:"Set of decorative prop accessories — dummy laser, dummy light, and rail covers.",price:13.00,emoji:"🎭",status:"new"},
+
+  // ── STORAGE SOLUTIONS ──
+  {id:182,name:"Ammo Tray — 9mm (50 rounds)",desc:"Printed ammo tray holding 50 rounds of 9mm. Stackable design.",price:7.00,emoji:"📦",status:"popular"},
+  {id:183,name:"Ammo Tray — .223/5.56 (20 rounds)",desc:"20-round ammo tray for .223 and 5.56. Keeps loose rounds organized.",price:7.00,emoji:"📦",status:"available"},
+  {id:184,name:"Ammo Tray — .308 (20 rounds)",desc:"Tray for 20 rounds of .308 / 7.62x51. Fits standard MTM boxes.",price:7.00,emoji:"📦",status:"available"},
+  {id:185,name:"Ammo Tray — .45 ACP (50 rounds)",desc:"50-round .45 ACP ammo tray. Stackable for bulk storage.",price:7.00,emoji:"📦",status:"available"},
+  {id:186,name:"Speed Strip Holder",desc:"Belt or bag-mounted holder for Bianchi / Safariland speed strips.",price:8.00,emoji:"📦",status:"available"},
+  {id:187,name:"Speed Loader Holder — Revolver",desc:"Holder for HKS and Safariland speed loaders. Attaches to belt or range bag.",price:9.00,emoji:"📦",status:"available"},
+  {id:188,name:"AR-15 PMAG Storage Tray (x5 mags)",desc:"Desktop tray holding 5 AR-15 PMAGs upright and organized.",price:14.00,emoji:"🗄️",status:"available"},
+  {id:189,name:"Pistol Mag Storage Block (x6 mags)",desc:"Desktop storage block for 6 double-stack pistol magazines.",price:13.00,emoji:"🗄️",status:"popular"},
+  {id:190,name:"Cleaning Patch Dispenser",desc:"Printed dispenser for cleaning patches. Mounts in gun cleaning area.",price:8.00,emoji:"🧹",status:"available"},
+  {id:191,name:"Solvent Trap Adapter — 1/2x28",desc:"Cosmetic thread adapter for 1/2x28 cleaning kits. Decorative design.",price:9.00,emoji:"🧹",status:"available"},
+  {id:192,name:"Cleaning Kit Roll Organizer",desc:"Printed cylindrical organizer for AR-15 cleaning rods and brushes.",price:10.00,emoji:"🧹",status:"available"},
+
+  // ── FINAL LISTINGS ──
+  {id:193,name:"Glock Gen 5 Magwell",desc:"Friction-fit magwell for Glock Gen 5 full-size frames. Updated fitment for Gen5 geometry.",price:13.00,emoji:"⬇️",status:"new"},
+  {id:194,name:"P80 / PF940 Magwell",desc:"Flared magwell for Polymer80 PF940v2 and PF940C frames. Drop-in fit.",price:13.00,emoji:"⬇️",status:"available"},
+  {id:195,name:"Streamlight TLR-1 Picatinny Riser",desc:"Riser adapter to mount Streamlight TLR-1 and TLR-2 on non-rail pistol frames via Picatinny.",price:11.00,emoji:"🔦",status:"available"},
+  {id:196,name:"Barrel Thread Alignment Tool",desc:"Alignment/timing rod for barrel thread timing during suppressor mounting.",price:9.00,emoji:"🔧",status:"available"},
+  {id:197,name:"AR-15 Gas Block Dimple Jig",desc:"Printed guide jig for drilling set screw dimples on AR-15 gas tubes.",price:11.00,emoji:"🔧",status:"available"},
+  {id:198,name:"Pistol Backstrap Spacer",desc:"Thin spacer to fine-tune grip fit on M&P, P320, and similar modular pistols.",price:7.00,emoji:"🖐️",status:"available"},
+  {id:199,name:"Custom Color / Design Upgrade",desc:"Add custom color or decorative pattern to any item. Contact for options and pricing.",price:0,emoji:"🎨",status:"custom"},
+  {id:200,name:"Custom Print Request",desc:"Don't see what you need? Send your idea and I'll design and print it. Pricing varies by complexity.",price:0,emoji:"✏️",status:"custom"},
+];
+let cart = {}, nextId = 201;
+
+function renderProducts() {
+  document.getElementById('productsGrid').innerHTML = products.map(p => `
+    <div class="product-card">
+      <div class="product-img">
+        <span style="font-size:3.8rem">${p.emoji}</span>
+        ${p.status!=='available'?`<div class="badge ${p.status}">${p.status==='sold-out'?'Sold Out':p.status==='new'?'New':p.status==='popular'?'Popular':'Custom'}</div>`:''}
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <span class="product-price">${p.price>0?'$'+p.price.toFixed(2):'Contact'}</span>
+          ${p.status==='custom'
+            ? `<a href="#contact" class="add-btn">Request →</a>`
+            : `<button class="add-btn" ${p.status==='sold-out'?'disabled':''} onclick="addToCart(${p.id})">${p.status==='sold-out'?'Sold Out':'+ Add to Cart'}</button>`}
+        </div>
+      </div>
+    </div>`).join('');
+  renderAdminList();
+}
+
+function addToCart(id) {
+  const p = products.find(x=>x.id==id);
+  if(!p||p.price===0) return;
+  cart[id]=(cart[id]||0)+1;
+  updateCartUI();
+  showToast(`${p.emoji} Added to cart!`);
+}
+
+function updateCartUI() {
+  const total = Object.values(cart).reduce((s,q)=>s+q,0);
+  document.getElementById('cartBadge').textContent = total;
+  const container = document.getElementById('cartItems');
+  if(total===0) {
+    container.innerHTML=`<div class="cart-empty"><div class="ei">🛒</div><p>Your cart is empty.</p></div>`;
+  } else {
+    container.innerHTML=Object.entries(cart).map(([id,qty])=>{
+      const p=products.find(x=>x.id==id); if(!p) return '';
+      return `<div class="cart-item">
+        <div class="cart-item-icon">${p.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-price">$${(p.price*qty).toFixed(2)}</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+          <span class="qty-count">${qty}</span>
+          <button class="qty-btn" onclick="changeQty(${id},1)">+</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('cartTotal').textContent=`$${cartSum().toFixed(2)}`;
+}
+
+function changeQty(id,d){cart[id]=(cart[id]||0)+d; if(cart[id]<=0)delete cart[id]; updateCartUI();}
+function cartSum(){return Object.entries(cart).reduce((s,[id,q])=>{const p=products.find(x=>x.id==id);return s+(p?p.price*q:0);},0);}
+function openCart(){document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartPanel').classList.add('open');}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartPanel').classList.remove('open');}
+
+function openCheckout(){
+  if(cartSum()===0){showToast('Your cart is empty!');return;}
+  closeCart();
+  const sum=cartSum();
+  document.getElementById('summaryLines').innerHTML=Object.entries(cart).map(([id,q])=>{
+    const p=products.find(x=>x.id==id); if(!p) return '';
+    return `<div class="summary-line"><span>${p.emoji} ${p.name} × ${q}</span><span>$${(p.price*q).toFixed(2)}</span></div>`;
+  }).join('');
+  document.getElementById('summaryTotal').textContent=`$${sum.toFixed(2)}`;
+  ['venmoAmt','cashAmt','xmrAmt','btcAmt','payBtnAmt'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=`$${sum.toFixed(2)}`;
+  });
+  document.getElementById('paymentModal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('paymentModal').classList.remove('open');}
+function switchTab(t,btn){
+  document.querySelectorAll('.pay-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.pay-panel').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+t).classList.add('active');
+}
+function confirmOrder(method){
+  document.getElementById('modalBody').innerHTML=`
+    <div class="success-screen">
+      <div class="si">🎉</div>
+      <h3>Order Received!</h3>
+      <p>Thanks for your purchase via <strong>${method}</strong>.<br>
+      Bill will confirm your order and ship within 3–5 business days.<br>
+      Questions? <strong>billydolan4@gmail.com</strong></p>
+      <button class="btn-primary" onclick="closeModal();cart={};updateCartUI();">Back to Shop</button>
+    </div>`;
+}
+
+function toggleAdmin(){document.getElementById('adminPanel').classList.toggle('open');}
+function addProduct(){
+  const name=document.getElementById('adName').value.trim();
+  const desc=document.getElementById('adDesc').value.trim();
+  const price=parseFloat(document.getElementById('adPrice').value);
+  const emoji=document.getElementById('adEmoji').value.trim()||'📦';
+  const status=document.getElementById('adStatus').value;
+  if(!name||isNaN(price)){showToast('Fill in name and price.');return;}
+  products.push({id:nextId++,name,desc,price,emoji,status});
+  renderProducts();
+  ['adName','adDesc','adPrice','adEmoji'].forEach(id=>document.getElementById(id).value='');
+  showToast(`"${name}" added! ✅`);
+}
+function deleteProduct(id){products=products.filter(p=>p.id!=id);delete cart[id];renderProducts();updateCartUI();showToast('Listing removed.');}
+function renderAdminList(){
+  document.getElementById('adminItemsList').innerHTML=products.map(p=>`
+    <div class="admin-item">
+      <span>${p.emoji} <strong>${p.name}</strong> — ${p.price>0?'$'+p.price.toFixed(2):'Contact'} <em style="color:var(--dim)">[${p.status}]</em></span>
+      <button class="del-btn" onclick="deleteProduct(${p.id})">🗑</button>
+    </div>`).join('');
+}
+
+function copyText(t){navigator.clipboard.writeText(t).then(()=>showToast('Address copied! 📋'));}
+function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function fmtExpiry(el){let v=el.value.replace(/\D/g,'').substring(0,4);if(v.length>=2)v=v.substring(0,2)+' / '+v.substring(2);el.value=v;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function initStripe(){/* const stripe=Stripe('pk_test_YOUR_KEY'); */}
+
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>
